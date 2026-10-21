@@ -9,7 +9,7 @@ DB wiring: env over config; defaults are for the .27 docker `cinc-net` deploy.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
-import psycopg2
+import psycopg
 
 app = FastAPI()
 
@@ -31,7 +31,7 @@ PG_PASS = os.environ.get("POSTGRES_PASSWORD", "secret")
 
 
 def _connect():
-    return psycopg2.connect(
+    return psycopg.connect(
         host=PG_HOST,
         port=PG_PORT,
         dbname=PG_DB,

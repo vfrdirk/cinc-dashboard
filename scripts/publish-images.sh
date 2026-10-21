@@ -22,12 +22,20 @@ cd "$(dirname "$0")/.."
 
 echo "==> registry : ${REGISTRY}"
 echo "==> tag      : ${TAG}"
-echo "==> building : ${SERVICES[*]}"
+echo "==> building : ${SERVICES[*]} for linux/amd64,linux/arm64"
 
-docker compose build "${SERVICES[@]}"
-
-echo "==> pushing"
-docker compose push "${SERVICES[@]}"
+# Use docker buildx build to create and push multi-platform images.
+# The --push flag builds and pushes to the registry in one step. It does not
+# load the images into the local `docker images` list.
+for svc in "${SERVICES[@]}"; do
+  echo
+  echo "--> building and pushing ${svc}"
+  docker buildx build \
+    --platform linux/amd64,linux/arm64 \
+    --tag "${REGISTRY}/cinc-dashboard-${svc}:${TAG}" \
+    --push \
+    "./${svc}"
+done
 
 echo
 echo "==> published:"
