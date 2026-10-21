@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cinc-dashboard</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<style>
+  /* Palette + type aligned to cinc-console (tas50/cinc-console app/globals.css). */
+  :root {
+    --bg: #131318;
+    --surface: #1c1b22;
+    --surface-2: #232230;
+    --border: #2d2b3a;
+    --text: #e9e8ef;
+    --muted: #8b8a9e;
+    --primary: #7c27ff;
+    --primary-hover: #9357ff;
+    --link: #a78bfa;
+    --success: #3fb950;
+    --warn: #d29922;
+    --danger: #f85149;
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(0,0,0,.3);
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-size: 14px; line-height: 1.5;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--bg); color: var(--text);
+  }
+  .app { max-width: 1080px; margin: 0 auto; padding: 24px 24px 56px; }
+
+  /* ---------- topbar ---------- */
+  header.topbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 16px 18px; border-radius: var(--radius); background: var(--surface);
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+  header.topbar .title { display: flex; align-items: center; gap: 12px; }
+  header.topbar .logo {
+    width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 15px;
+  }
+  header.topbar h1 { font-size: 17px; margin: 0; font-weight: 700; letter-spacing: .2px; }
+  header.topbar .sub { color: var(--muted); font-size: 12.5px; margin-top: 1px; }
+  .live { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--muted); }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block; flex-shrink: 0; }
+  .status-dot.off { background: var(--danger); }
+
+  /* ---------- summary ---------- */
+  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-top: 18px; }
+  .stat {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px 16px; box-shadow: var(--shadow);
+  }
+  .stat .k { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; font-weight: 600; }
+  .stat .v { font-size: 24px; font-weight: 800; margin-top: 5px; line-height: 1.1; }
+  .stat .v.ok { color: var(--success); }
+  .stat .v.bad { color: var(--danger); }
+  .stat .v.warn { color: var(--warn); }
+
+  /* ---------- toolbar ---------- */
+  .toolbar { display: flex; gap: 12px; margin: 20px 0 16px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+  .toolbar .group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .toolbar input {
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+    padding: 9px 13px; border-radius: 9px; font-size: 14px; outline: none; min-width: 220px;
+  }
+  .toolbar input::placeholder { color: var(--muted); }
+  .toolbar input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,39,255,.18); }
+  .btn {
+    background: var(--primary); color: #fff; border: none; padding: 9px 15px; border-radius: 9px;
+    font-weight: 700; font-size: 13px; cursor: pointer; box-shadow: var(--shadow);
+  }
+  .btn:hover { background: var(--primary-hover); }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); box-shadow: none; }
+  .btn.ghost:hover { border-color: var(--primary); background: rgba(124,39,255,.08); }
+  .hint { font-size: 12.5px; color: var(--muted); }
+
+  /* ---------- cards ---------- */
+  .cards { display: flex; flex-direction: column; gap: 12px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 15px 18px; box-shadow: var(--shadow); cursor: pointer;
+    transition: border-color .15s;
+  }
+  .card:hover, .card.clicked { border-color: var(--primary); }
+  .card-actions { margin-top: 10px; display: flex; gap: 8px; }
+  .card-actions .hist-btn { padding: 6px 12px; font-size: 12px; }
+  .back-btn { color: var(--link); text-decoration: none; font-size: 13px; font-weight: 600; }
+  .back-btn:hover { text-decoration: underline; }
+  .mono { font-family: var(--mono); font-size: 12px; }
+  .card-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+  .host {
+    font-size: 17px; font-weight: 700; line-height: 1.3;
+    display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  }
+  .meta { margin-top: 7px; font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .meta b { color: var(--text); font-weight: 700; }
+  .meta .sep { color: #3a3850; }
+  .runid { margin-top: 7px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); opacity: .75; }
+  .when { font-size: 12px; color: var(--muted); font-family: var(--mono); white-space: nowrap; padding-top: 3px; }
+
+  /* ---------- pills ---------- */
+  .pill {
+    display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .3px; white-space: nowrap; vertical-align: middle;
+  }
+  .pill.ok      { background: rgba(63,185,80,.16);  color: #7ee094; }
+  .pill.warn    { background: rgba(210,153,34,.18); color: #f0d08a; }
+  .pill.bad     { background: rgba(248,81,73,.18);  color: #ff9d97; }
+  .pill.unknown { background: rgba(139,138,158,.22); color: #c7c7d8; }
+  .pill.none    { background: rgba(139,138,158,.12); color: #a7a6bb; }
+
+  /* ---------- detail (grouped drill-down) ---------- */
+  .detail { margin-top: 14px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .detail .group { border-top: 1px solid var(--border); padding: 0; margin: 0; }
+  .detail .group:first-child { border-top: none; }
+  .detail .group > .group-head {
+    display: flex; align-items: center; gap: 9px; padding: 11px 16px; font-size: 13.5px; font-weight: 600;
+    margin: 0;
+  }
+  .detail .group > summary.group-head {
+    display: flex; cursor: pointer; list-style: none; margin: 0;
+  }
+  .detail .group > summary.group-head::-webkit-details-marker { display: none; }
+  .detail .group > summary.group-head::marker { content: ""; }
+  .detail .group > summary.group-head::before {
+    content: "\25B8"; color: var(--muted); font-size: 10px; width: 11px; flex: 0 0 11px;
+  }
+  .detail .group[open] > summary.group-head::before { content: "\25BE"; }
+  .detail .group.empty > .group-head {
+    color: var(--muted); font-weight: 500; padding: 11px 16px; margin: 0;
+  }
+  .detail .group.empty > .group-head::before {
+    content: "\25B8"; color: var(--muted); opacity: .4; width: 11px; flex: 0 0 11px;
+  }
+  /* Empty groups carry no status weight: mute the pill so a zero-count row
+     doesn't read as a loud colored blob. The label text still says which. */
+  .detail .group.empty > .group-head .pill { background: rgba(139,138,158,.12); color: #a7a6bb; }
+  .detail .group .count { color: var(--muted); font-weight: 400; font-size: 12.5px; }
+  .detail .group-body { padding: 2px 16px 14px; }
+
+  /* ---------- history (per-run drill-down) ---------- */
+  .hist-list { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .hist-group {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+  }
+  .hist-group > summary.hist-head {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 11px 16px; font-size: 13.5px; cursor: pointer; list-style: none; margin: 0;
+  }
+  .hist-group > summary.hist-head::-webkit-details-marker { display: none; }
+  .hist-group > summary.hist-head::marker { content: ""; }
+  .hist-group > summary.hist-head::before {
+    content: "\25B8"; color: var(--muted); font-size: 10px; width: 11px; flex: 0 0 11px;
+  }
+  .hist-group[open] > summary.hist-head::before { content: "\25BE"; }
+  .hist-head b { color: var(--text); }
+  .hist-body { padding: 2px 16px 14px; }
+
+  /* ---------- table ---------- */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; white-space: nowrap; }
+  td { white-space: nowrap; }
+  td.name { white-space: normal; word-break: break-word; min-width: 180px; }
+  td .pill { padding: 2px 8px; font-size: 11px; }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,.025); }
+
+  .empty { margin-top: 20px; text-align: center; color: var(--muted); padding: 36px; border: 1px dashed var(--border); border-radius: var(--radius); }
+  .spinner { text-align: center; color: var(--muted); padding: 32px; font-size: 13px; }
+  .attempt { padding: 12px 16px; font-size: 13px; color: var(--danger); }
+  .footer { margin-top: 28px; font-size: 12px; color: var(--muted); text-align: center; }
+
+  @media (max-width: 640px) {
+    .app { padding: 16px 14px 40px; }
+    .card-main { flex-direction: column; gap: 8px; }
+    .stat .v { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="title">
+      <div class="logo">&#9672;</div>
+      <div>
+        <h1>cinc-dashboard</h1>
+        <div class="sub">Latest converge per node &middot; live from the .27 cinc_collector</div>
+      </div>
+    </div>
+    <div class="live">
+      <span class="status-dot" id="liveDot"></span>
+      <span id="liveLabel">connecting&hellip;</span>
+    </div>
+  </header>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="toolbar">
+    <div class="group">
+      <input id="filter" type="text" placeholder="Filter by hostname&hellip;" autocomplete="off">
+      <button class="btn ghost" id="refreshBtn">Refresh</button>
+    </div>
+    <div class="hint" id="connHint">fetching /runs &middot; /api/runs/:id/resources</div>
+  </div>
+
+  <main class="cards" id="cards"></main>
+  <div class="footer">cinc-dashboard &middot; served on port 80 &middot; data from the .27 cinc_collector</div>
+</div>
+
+<script>
+const statusMap = {
+  success: 'ok', failed: 'bad', warn: 'warn', unknown: 'unknown',
+  updated: 'ok', created: 'ok', 'up-to-date': 'none', skipped: 'none',
+  failed_run: 'bad', failed_resource: 'bad', incomplete: 'warn'
+};
+
+const RAW = {
+  runs: [
+    { run_id: "1975b609-1243-43ec-b5dd-afd3b40eb603", node_name: "zimapve1.home.arpa", status: "success", start_time: "2026-10-16 04:28:47+00", duration_ms: 2000, total_resources: 26, updated_resources: 0 },
+    { run_id: "dc59cd80-32ee-4506-8dbd-f7b54b881345", node_name: "projectpi", status: "success", start_time: "2026-10-16 04:28:44+00", duration_ms: 2000, total_resources: 26, updated_resources: 0 },
+    { run_id: "5f9da8cc-7e60-4e8b-acd1-1bc6d2d44f0d", node_name: "dirk-OptiPlex-3040", status: "success", start_time: "2026-10-16 04:27:16+00", duration_ms: 2000, total_resources: 26, updated_resources: 0 },
+    { run_id: "41fb4c49-7027-48f4-a22a-439f2066843b", node_name: "gitlab", status: "success", start_time: "2026-10-16 04:25:54+00", duration_ms: 2000, total_resources: 26, updated_resources: 0 },
+    { run_id: "a513ce77-3f54-420f-b2d8-c3363bb0899e", node_name: "freepbx", status: "success", start_time: "2026-10-16 04:24:57+00", duration_ms: 0, total_resources: 26, updated_resources: 0 }
+  ]
+};
+
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+}[c]));
+
+function fmtDuration(ms) {
+  if (ms == null || ms === 0) return '\u2014';
+  if (ms < 1000) return ms + 'ms';
+  return (ms / 1000).toFixed(1) + 's';
+}
+
+function fmtTime(s) {
+  if (!s) return '';
+  const d = new Date(String(s).replace(' ', 'T'));
+  if (isNaN(d.getTime())) return String(s);
+  return d.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function pill(status) {
+  const k = statusMap[status] || 'unknown';
+  // Show the resource's real status text (updated / up-to-date / skipped /
+  // success / …) rather than collapsing everything into success|failed.
+  return `<span class="pill ${k}">${esc(status)}</span>`;
+}
+
+// "nginx 1.2.3" — the version alone is meaningless without the cookbook name.
+function cookbookLabel(e) {
+  const n = e.cookbook_name, v = e.cookbook_version;
+  if (n && v) return n + ' ' + v;
+  return n || v || '';
+}
+
+function cardHtml(run) {
+  const total = run.total_resources || 0;
+  const updated = run.updated_resources || 0;
+  // Resources that didn't change are up-to-date (Chef took no action), NOT
+  // failures. Run-level data carries no per-resource failure count, so the
+  // remainder must never be labelled "failed".
+  const upToDate = Math.max(total - updated, 0);
+  return `
+    <div class="card" data-id="${esc(run.run_id)}" data-node="${esc(run.node_name)}">
+      <div class="card-main">
+        <div>
+          <div class="host">${esc(run.node_name)}<span class="pill ${statusMap[run.status] || 'unknown'}">${esc(run.status)}</span></div>
+          <div class="meta">
+            <span><b>${updated}</b>/${total} updated</span>
+            <span class="sep">&middot;</span>
+            <span>${upToDate} up-to-date</span>
+            <span class="sep">&middot;</span>
+            <span>${fmtDuration(run.duration_ms)}</span>
+          </div>
+          <div class="runid">${esc(run.run_id)}</div>
+        </div>
+        <div class="when">${fmtTime(run.start_time)}</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn ghost hist-btn" data-node="${esc(run.node_name)}">History</button>
+      </div>
+    </div>`;
+}
+
+// Drill-down grouping: `skipped` is folded into `up-to-date` (both mean "no
+// action taken"); the per-resource Result column still shows the exact status.
+const GROUP_ORDER = ['updated', 'up-to-date', 'failed'];
+const GROUP_LABEL = { 'up-to-date': 'up-to-date / skipped' };
+const STATUS_FOLD = { skipped: 'up-to-date' };
+
+// Detail sections for one run's resource events, grouped into collapsible
+// per-status sections (native <details>, so clicking a header reveals just that
+// status). `detailHtml` wraps these for a node card; the history view reuses
+// the same sections so both views render identical resource detail.
+function detailSections(run) {
+  const events = run.resource_events || [];
+  const groups = {};
+  for (const e of events) {
+    const raw = e.status || 'unknown';
+    const st = STATUS_FOLD[raw] || raw;
+    (groups[st] = groups[st] || []).push(e);
+  }
+  const extras = Object.keys(groups).filter(s => GROUP_ORDER.indexOf(s) === -1);
+  return GROUP_ORDER.concat(extras).map(st => {
+    const rows = groups[st] || [];
+    const label = GROUP_LABEL[st] || st;
+    const head = `<span class="pill ${statusMap[st] || 'unknown'}">${esc(label)}</span><span class="count">${rows.length}</span>`;
+    if (!rows.length) {
+      return `<div class="group empty"><span class="group-head">${head}</span></div>`;
+    }
+    return `<details class="group">
+      <summary class="group-head">${head}</summary>
+      <div class="group-body">
+        <table>
+          <thead><tr><th>Result</th><th>Type</th><th>Name</th><th>Action</th><th>Duration</th><th>Cookbook</th></tr></thead>
+          <tbody>
+            ${rows.map(e => `<tr>
+              <td>${pill(e.status)}</td>
+              <td>${esc(e.resource_type)}</td>
+              <td class="name">${esc(e.resource_name)}</td>
+              <td>${esc(e.result)}</td>
+              <td>${fmtDuration(e.duration_ms)}</td>
+              <td>${esc(cookbookLabel(e))}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </details>`;
+  }).join('');
+}
+
+function detailHtml(run) {
+  return `<div class="detail"><div class="groups">${detailSections(run)}</div></div>`;
+}
+
+let runs = [];
+let filter = '';
+let nodeHistory = null; // { node_name, runs: [...] } when viewing history
+
+async function api(path) {
+  const res = await fetch(path, { cache: 'no-store' });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+function normalizeRun(r) {
+  return {
+    ...r,
+    total_resources: (r.total_resource_count ?? r.total_resources) || 0,
+    updated_resources: (r.updated_resource_count ?? r.updated_resources) || 0,
+  };
+}
+
+// Deduplicate runs by node_name, keeping only the latest run per node.
+function dedupRuns(allRuns) {
+  const byNode = {};
+  for (const r of allRuns) {
+    const name = r.node_name || '';
+    if (!byNode[name] || (r.start_time || '') > (byNode[name].start_time || '')) {
+      byNode[name] = r;
+    }
+  }
+  return Object.values(byNode).sort((a, b) => (b.start_time || '').localeCompare(a.start_time || ''));
+}
+
+async function loadRuns() {
+  try {
+    const data = await api('/runs');
+    const all = (Array.isArray(data.runs) ? data.runs : []).map(normalizeRun);
+    runs = dedupRuns(all);
+    return true;
+  } catch (err) {
+    // file:// fallback: use the embedded JSON stub so the card still renders.
+    runs = dedupRuns((RAW.runs || []).map(normalizeRun));
+    return false;
+  }
+}
+
+async function refresh() {
+  const dot = $('#liveDot');
+  const label = $('#liveLabel');
+  const conn = $('#connHint');
+  dot.className = 'status-dot';
+  conn.textContent = 'refreshing\u2026';
+  const fromApi = await loadRuns();
+  conn.textContent = fromApi ? 'live from the .27 collector' : 'static fallback (file://)';
+  dot.className = fromApi ? 'status-dot' : 'status-dot off';
+  label.textContent = fromApi ? 'live' : 'offline';
+  nodeHistory = null; // reset history view on refresh
+  render();
+}
+
+function filtered() {
+  if (nodeHistory) return nodeHistory.runs;
+  const q = filter.trim().toLowerCase();
+  if (!q) return runs;
+  return runs.filter(r => String(r.node_name || '').toLowerCase().includes(q));
+}
+
+// History view: one expandable row per run. Opening a run fetches its
+// resource events and renders the same grouped detail the node card uses
+// (updated / up-to-date / failed), so both views agree.
+function historyHtml(nodeName, runs) {
+  const items = runs.map(r => `
+    <details class="hist-group" data-run-id="${esc(r.run_id)}">
+      <summary class="hist-head">
+        <span class="when">${fmtTime(r.start_time)}</span>
+        <span class="pill ${statusMap[r.status] || 'unknown'}">${esc(r.status)}</span>
+        <span><b>${r.updated_resources || 0}</b>/${r.total_resources || 0} updated</span>
+        <span>${fmtDuration(r.duration_ms)}</span>
+        <span class="mono">${esc(r.run_id.slice(0, 8))}…</span>
+      </summary>
+      <div class="hist-body" data-loaded="0">loading resource events…</div>
+    </details>`).join('');
+  return `
+    <div class="card clicked">
+      <div class="card-main">
+        <div>
+          <div class="host">${esc(nodeName)}<span class="pill ok">history</span></div>
+          <div class="meta"><span>${runs.length} runs</span><span class="sep">&middot;</span><span>click a run to see its resources</span></div>
+        </div>
+        <div><a href="#" class="back-btn" id="backBtn">&larr; back</a></div>
+      </div>
+      <div class="hist-list">${items}</div>
+    </div>`;
+}
+
+// Lazy-load a history run's resource events the first time it is opened.
+function wireHistoryDrill() {
+  document.querySelectorAll('.hist-group').forEach(el => {
+    el.addEventListener('toggle', async (ev) => {
+      if (!ev.target.open) return;
+      const body = el.querySelector('.hist-body');
+      if (!body || body.dataset.loaded === '1') return;
+      body.dataset.loaded = '1';
+      const runId = el.dataset.runId;
+      try {
+        const data = await api(`/api/runs/${encodeURIComponent(runId)}/resources`);
+        body.innerHTML = `<div class="detail">${detailSections({ resource_events: data.resources || [] })}</div>`;
+      } catch (err) {
+        body.innerHTML = `<div class="attempt">Could not load resource events: ${esc(err.message)}</div>`;
+      }
+    });
+  });
+}
+
+function render() {
+  const container = $('#cards');
+  const summary = $('#summary');
+  const data = filtered();
+
+  // summary strip — show unique node count, not total runs
+  const total = runs.length;
+  const success = runs.filter(r => r.status === 'success').length;
+  const failedRuns = runs.filter(r => r.status === 'failed' || r.status === 'bad').length;
+  const updated = runs.reduce((a, r) => a + (r.updated_resources || 0), 0);
+  const totalRes = runs.reduce((a, r) => a + (r.total_resources || 0), 0);
+  const upToDate = Math.max(totalRes - updated, 0);
+  summary.innerHTML = `
+    <div><div class="k">nodes</div><div class="v ${success === total && total ? 'ok' : ''}">${total}</div></div>
+    <div><div class="k">resources</div><div class="v">${totalRes}</div></div>
+    <div><div class="k">updated</div><div class="v">${updated}</div></div>
+    <div><div class="k">up-to-date</div><div class="v">${upToDate}</div></div>
+    <div><div class="k">status</div><div class="v ${success === total && total ? 'ok' : failedRuns ? 'bad' : 'warn'}">${success === total ? 'all green' : failedRuns ? 'issues' : 'no runs'}</div></div>`;
+
+  if (nodeHistory) {
+    container.innerHTML = historyHtml(nodeHistory.node_name, nodeHistory.runs);
+    wireHistoryDrill();
+    const backBtn = $('#backBtn');
+    if (backBtn) {
+      backBtn.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        nodeHistory = null;
+        render();
+      });
+    }
+    return;
+  }
+
+  if (!runs.length) {
+    container.innerHTML = `<div class="empty">No converge runs on record.</div>`;
+    return;
+  }
+
+  container.innerHTML = data.map(cardHtml).join('');
+  container.querySelectorAll('.card').forEach(el => {
+    el.addEventListener('click', (ev) => {
+      // Clicks inside an expanded detail (the events table) must not toggle it.
+      if (ev.target.closest('.detail')) return;
+
+      const id = el.dataset.id;
+      const nodeName = el.dataset.node;
+
+      // Already expanded -> collapse. Remove only the direct-child detail,
+      // never a whole card, so repeated open/close can't stack up copies.
+      const open = el.querySelector(':scope > .detail');
+      if (open) { open.remove(); el.classList.remove('clicked'); return; }
+
+      // Guard against a double-click firing two fetches / two appends.
+      if (el.dataset.loading === '1') return;
+      el.dataset.loading = '1';
+
+      (async () => {
+        try {
+          const data = await api(`/api/runs/${encodeURIComponent(id)}/resources`);
+          const run = runs.find(r => r.run_id === id);
+          if (run) run.resource_events = data.resources || [];
+          // Re-check: the user may have collapsed it while the fetch was in flight.
+          if (!el.querySelector(':scope > .detail')) {
+            el.insertAdjacentHTML('beforeend',
+              detailHtml(run || { run_id: id, status: 'unknown', resource_events: [] }));
+            el.classList.add('clicked');
+          }
+        } catch (err) {
+          if (!el.querySelector(':scope > .detail')) {
+            el.insertAdjacentHTML('beforeend',
+              `<div class="detail"><div class="attempt">Could not load resource events: ${esc(err.message)}</div></div>`);
+          }
+        } finally {
+          el.dataset.loading = '';
+        }
+      })();
+    });
+
+    // History button — fetch and display all runs for this node.
+    const histBtn = el.querySelector('.hist-btn');
+    if (histBtn) {
+      histBtn.addEventListener('click', async (ev) => {
+        ev.stopPropagation();
+        const name = histBtn.dataset.node;
+        try {
+          const data = await api(`/api/nodes/${encodeURIComponent(name)}/runs`);
+          nodeHistory = { node_name: name, runs: (data.runs || []).map(normalizeRun) };
+          render();
+        } catch (err) {
+          alert('Could not load history: ' + err.message);
+        }
+      });
+    }
+  });
+}
+
+async function init() {
+  const filterEl = $('#filter');
+  filterEl.addEventListener('input', (e) => { filter = e.target.value; render(); });
+  $('#refreshBtn').addEventListener('click', refresh);
+  await refresh();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

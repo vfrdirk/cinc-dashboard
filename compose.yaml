@@ -1,0 +1,132 @@
+# cinc-dashboard — single deployable stack.
+#
+# Architecture
+#   postgres    postgres:17-alpine -> canonical cinc_collector DB, schema from
+#                                     ./postgres-init (applied on first boot)
+#   collector-init  one-shot: fixes ownership of the raw-events bind mount so
+#                         the collector (uid 10001) can write to it
+#   collector   ./collector        -> receives CINC/Chef converge payloads on
+#                                     :8080 and writes runs/resource_events
+#   api         ./api              -> FastAPI JSON backend (/runs, /api/*)
+#   ui          ./ui               -> WebUI (latest-run-card.html) + nginx proxy
+#                                     for /runs and /api/* to the data API
+#
+# All services share the `cinc-net` bridge and address each other by service
+# name, so nothing needs a hardcoded host or an extra_hosts entry.
+#
+# Usage
+#   cp .env.example .env      # set POSTGRES_PASSWORD, keep CINC_COLLECTOR_TOKEN
+#   docker compose up -d --build
+#   open http://<host>/
+#
+# Prebuilt images (no build step, for a lab/other host):
+#   docker compose pull && docker compose up -d
+#   Published at docker.io/chunkylover59/cinc-dashboard-{collector,api,ui}
+#
+# Image coordinates are overridable for a fork or a private registry:
+#   CINC_REGISTRY=ghcr.io/myorg CINC_IMAGE_TAG=v0.1.0 docker compose pull
+
+# The compose project name is intentionally NOT pinned here: it is derived from
+# the checkout directory, so two checkouts (e.g. production and a lab test) get
+# separate projects, networks, and volumes instead of colliding.
+
+services:
+  # Data store ---------------------------------------------------------------
+  postgres:
+    image: postgres:17-alpine
+    container_name: cinc-dashboard-postgres
+    env_file: [.env]
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d:ro
+    shm_size: 256mb
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+    restart: unless-stopped
+    networks: [cinc-net]
+
+  # Bind-mount prep ----------------------------------------------------------
+  # Compose creates a missing bind-mount source as root:root 755. The collector
+  # runs as uid 10001 and opens the event file for append, so the first ingest
+  # would die with PermissionError and the endpoint return 500. This one-shot
+  # fixes ownership before the collector starts.
+  collector-init:
+    image: alpine:3.20
+    container_name: cinc-dashboard-collector-init
+    volumes:
+      - ./data/raw-events:/data/raw-events
+    entrypoint:
+      - sh
+      - -c
+      - >-
+        mkdir -p /data/raw-events &&
+        chown -R 10001:10001 /data/raw-events &&
+        touch /data/raw-events/collector.ndjson &&
+        chown 10001:10001 /data/raw-events/collector.ndjson &&
+        echo "raw-events ready"
+    restart: "no"
+    networks: [cinc-net]
+
+  # Ingest receiver ----------------------------------------------------------
+  collector:
+    build: ./collector
+    image: ${CINC_REGISTRY:-chunkylover59}/cinc-dashboard-collector:${CINC_IMAGE_TAG:-latest}
+    container_name: cinc-dashboard-collector
+    env_file: [.env]
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      EVENT_DIR: /data/raw-events
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data/raw-events:/data/raw-events
+    depends_on:
+      postgres:
+        condition: service_healthy
+      collector-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    networks: [cinc-net]
+
+  # Data API (FastAPI) -------------------------------------------------------
+  api:
+    build: ./api
+    image: ${CINC_REGISTRY:-chunkylover59}/cinc-dashboard-api:${CINC_IMAGE_TAG:-latest}
+    container_name: cinc-dashboard-api
+    env_file: [.env]
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks: [cinc-net]
+
+  # WebUI (the distributable dashboard) --------------------------------------
+  ui:
+    build: ./ui
+    image: ${CINC_REGISTRY:-chunkylover59}/cinc-dashboard-ui:${CINC_IMAGE_TAG:-latest}
+    container_name: cinc-dashboard-ui
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks: [cinc-net]
+
+networks:
+  cinc-net:
+    driver: bridge
+
+volumes:
+  postgres-data:

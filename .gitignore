@@ -1,0 +1,19 @@
+# Secrets — the real .env holds the DB password and the ingest token.
+.env
+
+# Collector raw-event bind mount: runtime data, not source.
+data/raw-events/*.ndjson
+
+# Python / local tooling
+__pycache__/
+*.pyc
+.venv/
+
+# Scratch logs
+*.log
+
+# Seeding dumps used against the live DB (hundreds of MB, not source)
+seed-*.sql
+
+# Stale embedded fallback JSON — the UI carries its own fallback inline.
+cinc_collector_output.json
