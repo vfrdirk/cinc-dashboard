@@ -5,13 +5,10 @@ lets you drill into the individual resources (updated / up-to-date / failed).
 
 ```
 postgres ── cinc_collector DB (canonical store)
-collector ── receives converge payloads on :8080, writes runs + resource_events
-api       ── FastAPI JSON backend on :8000 (/runs, /api/*)
-ui        ── nginx WebUI on :80, proxies /runs and /api/* to the api
+app      ── unified FastAPI service: converge ingest + query API + WebUI
 ```
 
-All four services share one compose network and address each other by service
-name, so nothing is bound to a host IP.
+Single container, single port (8080). All services share one compose network.
 
 ## Quick start — build from source
 
@@ -21,30 +18,28 @@ cp .env.example .env          # set POSTGRES_PASSWORD, keep CINC_COLLECTOR_TOKEN
 docker compose up -d --build
 ```
 
-Open <http://localhost/>.
+Open <http://localhost:8080/>.
 
-## Quick start — pull the prebuilt images
+## Quick start — pull the prebuilt image
 
-No build step. Images are published to Docker Hub:
+No build step. Image is published to GHCR:
 
 ```bash
 cp .env.example .env          # still required: DB password + ingest token
-docker compose pull
-docker compose up -d
+CINC_REGISTRY=ghcr.io/vfrdirk CINC_IMAGE_TAG=v0.2.0 docker compose pull
+CINC_REGISTRY=ghcr.io/vfrdirk CINC_IMAGE_TAG=v0.2.0 docker compose up -d
 ```
 
 | Image | Purpose |
 |---|---|
-| `chunkylover59/cinc-dashboard-collector` | converge ingest receiver |
-| `chunkylover59/cinc-dashboard-api` | FastAPI JSON backend |
-| `chunkylover59/cinc-dashboard-ui` | nginx WebUI + API proxy |
+| `ghcr.io/vfrdirk/cinc-dashboard` | unified app (ingest + API + WebUI) |
 
 `postgres:17-alpine` is upstream and pulled automatically.
 
 To use a different registry or tag:
 
 ```bash
-CINC_REGISTRY=ghcr.io/myorg CINC_IMAGE_TAG=v0.1.0 docker compose pull
+CINC_REGISTRY=ghcr.io/myorg CINC_IMAGE_TAG=v0.2.0 docker compose pull
 ```
 
 ## Configuration
@@ -64,26 +59,22 @@ CINC_REGISTRY=ghcr.io/myorg CINC_IMAGE_TAG=v0.1.0 docker compose pull
 
 | Port | Service |
 |---|---|
-| `80` | WebUI (single entry point) |
-| `8000` | API (also reachable through the UI proxy) |
-| `8080` | Collector ingest endpoint |
+| `8080` | Single entry point (WebUI + API + ingest) |
 
 ## Persistent data
 
 - `postgres-data` named volume — the `runs` and `resource_events` tables.
 - `./data/raw-events/` bind mount — raw payloads as NDJSON (`collector.ndjson`),
-  kept for debugging. A one-shot `collector-init` container fixes its ownership
-  to uid 10001 on first boot, so the collector can append to it.
+  kept for debugging.
 
 ## Publishing images
 
 ```bash
-docker login
-scripts/publish-images.sh                        # :latest
-CINC_IMAGE_TAG=v0.1.0 scripts/publish-images.sh  # a versioned tag
+docker login ghcr.io
+CINC_REGISTRY=ghcr.io/vfrdirk CINC_IMAGE_TAG=v0.2.0 ./scripts/publish-images.sh
 ```
 
-Only the three custom images are pushed; `postgres` is never published.
+Only the app image is pushed; `postgres` is never published.
 
 ## Pointing nodes at the collector
 
@@ -108,14 +99,11 @@ CINC_COLLECTOR_TOKEN: <the token from .env>
 ## Verifying a fresh deploy
 
 ```bash
-curl -s localhost/api/summary
+curl -s localhost:8080/api/summary
 # {"total":0,"updated":0,"by_status":{},"latest_run":null}
-curl -s localhost:8000/health
+curl -s localhost:8080/health
 # {"status":"ok","db":"postgres:5432/cinc_collector"}
 ```
-
-> The UI proxy forwards `/api/*` and `/runs` only; `/health` is served by the
-> API container directly on port 8000.
 
 Then open the UI: node cards appear once a node reports in, and clicking a card
 (or a row in a node's **History**) fetches that run's per-resource detail.
