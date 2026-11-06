@@ -78,11 +78,27 @@ Only the app image is pushed; `postgres` is never published.
 
 ## Pointing nodes at the collector
 
+Configure `data_collector` in the node's `client.rb` (or `cinc.rb`):
+
+```ruby
+data_collector.server_url = "http://<host>:8080/"
+data_collector.token      = "<the CINC_COLLECTOR_TOKEN from .env>"
+```
+
+Or set the environment variable on the node before running cinc-client:
+
+```bash
+export CINC_COLLECTOR_TOKEN=<the token from .env>
+```
+
 Send converge data to `http://<host>:8080/` with the header:
 
 ```
 CINC_COLLECTOR_TOKEN: <the token from .env>
 ```
+
+Nodes report on every converge. The dashboard updates automatically once a run is
+ingested; node cards appear after the first successful report.
 
 ## API
 
