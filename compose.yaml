@@ -21,7 +21,7 @@ services:
 
   app:
     build: ./app
-    image: ${CINC_REGISTRY:-chunkylover59}/cinc-dashboard:${CINC_IMAGE_TAG:-latest}
+    image: ${CINC_REGISTRY:-ghcr.io/vfrdirk}/cinc-dashboard:${CINC_IMAGE_TAG:-latest}
     container_name: cinc-dashboard-app
     env_file: [.env]
     environment:
